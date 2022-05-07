@@ -1,9 +1,9 @@
 <template>
-  <div class="home">a</div>
+  <v-container> </v-container>
 </template>
 
 <script>
 export default {
-  name: "Home",
+  name: "SideBar",
 };
 </script>
