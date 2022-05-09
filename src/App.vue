@@ -1,15 +1,15 @@
 <template>
   <v-app>
-    <v-app-bar app color="light-blue darken-4" dark clipped-left>
+    <v-app-bar app color="#1D3B56" dark clipped-left>
       <v-icon class="mr-2" x-large>mdi-book-open-variant x-large</v-icon>
       <span class="text-h4"> ReadBook</span>
     </v-app-bar>
 
-    <v-navigation-drawer app clipped color="light-blue darken-3">
+    <v-navigation-drawer app clipped color="#2F6888">
       <v-list-item>
         <v-list-item-content>
           <v-icon size="150" color="white">mdi-book-open-variant</v-icon>
-          <v-list-item-subtitle style="color: white">
+          <v-list-item-subtitle style="color: white; text-align: center;">
             Welcome!
           </v-list-item-subtitle>
         </v-list-item-content>
@@ -64,3 +64,7 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+</style>
