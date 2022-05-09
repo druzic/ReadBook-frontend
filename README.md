@@ -1,24 +1,22 @@
-# readbook-frontend
+# ReadBook
 
-## Project setup
-```
-npm install
-```
+### Kratak opis
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Library managment system
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### Autori i zaduženja
 
-### Lints and fixes files
-```
-npm run lint
-```
+- **Dominik Ružić** (druzic@unipu.hr) - 
+- **Deni Vidan** (dvidan@unipu.hr) - 
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Javni link za aplikaciju
+
+Web: _in poggers_
+
+### Organizacija
+
+[Sveučilište Jurja Dobrile u Puli](http://www.unipu.hr/)  
+[Fakultet informatike u Puli](https://fipu.unipu.hr/)  
+Web aplikacije, ak.god. 2021./2022.  
+Mentor: **Nikola Tanković** (https://fipu.unipu.hr/fipu/nikola.tankovic, nikola.tankovic@unipu.hr)
