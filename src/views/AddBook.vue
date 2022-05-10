@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="pa-8">
     <v-card elevation="5">
       <v-card-title style="background-color: #2a5d7a; color: white"
         >Add new book</v-card-title
@@ -92,7 +92,6 @@ export default {
       this.$refs.form.reset();
     },
   },
-
 };
 </script>
 
