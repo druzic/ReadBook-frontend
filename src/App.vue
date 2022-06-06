@@ -1,15 +1,31 @@
 <template>
   <v-app>
-    <v-app-bar app color="#1D3B56" dark clipped-left>
+    <v-app-bar
+      app
+      color="#1D3B56"
+      dark
+      clipped-left
+      v-if="$route.name !== 'Login'"
+    >
+      <v-app-bar-nav-icon
+        @click.stop="drawer = !drawer"
+        v-if="isMobile"
+      ></v-app-bar-nav-icon>
       <v-icon class="mr-2" x-large>mdi-book-open-variant x-large</v-icon>
       <span class="text-h4"> ReadBook</span>
     </v-app-bar>
 
-    <v-navigation-drawer app clipped color="#2F6888">
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+      clipped
+      color="#2F6888"
+      v-if="$route.name !== 'Login'"
+    >
       <v-list-item>
         <v-list-item-content>
           <v-icon size="150" color="white">mdi-book-open-variant</v-icon>
-          <v-list-item-subtitle style="color: white; text-align: center;">
+          <v-list-item-subtitle style="color: white; text-align: center">
             Welcome!
           </v-list-item-subtitle>
         </v-list-item-content>
@@ -57,14 +73,35 @@ export default {
         { title: "All books", icon: "mdi-book", link: "/books" },
         { title: "All issued", icon: "mdi-book-clock", link: "/issued" },
         { title: "Report", icon: "mdi-poll", link: "/report" },
-        { title: "Logout", icon: "mdi-logout" },
+        { title: "Logout", icon: "mdi-logout", link: "/login" },
       ],
       right: null,
+      drawer: true,
+      isMobile: false,
+      windowWidth: window.innerWidth,
     };
+  },
+  methods: {
+    onResize() {
+      this.windowWidth = window.innerWidth;
+    },
+  },
+  watch: {
+    windowWidth() {
+      if (this.windowWidth <= 1263) {
+        this.isMobile = true;
+      } else this.isMobile = false;
+    },
+    group() {
+      this.drawer = false;
+    },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener("resize", this.onResize);
+    });
   },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
