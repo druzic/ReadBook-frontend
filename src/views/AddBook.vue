@@ -57,12 +57,10 @@
             :disabled="!valid"
             color="success"
             class="mr-4"
-            @click="validate"
+            @click="addBook"
           >
-            Validate
+            Add book
           </v-btn>
-
-          <v-btn color="error" class="mr-4" @click="reset"> Reset Form </v-btn>
         </v-form>
       </v-card-text>
     </v-card>
@@ -70,6 +68,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data: () => ({
     valid: true,
@@ -81,15 +80,27 @@ export default {
     category: null,
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
     fieldRules: [(v) => !!v || "Field is required"],
+    books: [],
+    newBook: [],
   }),
 
   methods: {
-    validate() {
-      this.$refs.form.validate();
-      console.log(this.title);
-    },
-    reset() {
-      this.$refs.form.reset();
+    async addBook() {
+      try {
+        this.$refs.form.validate();
+        const res = await axios.post("http://localhost:3000/book/add", {
+          title: this.title,
+          author: this.author,
+          isbn: this.isbn,
+          quantity: this.quantity,
+          description: this.description,
+          category: this.category,
+        });
+        this.$refs.form.reset();
+        console.log(res.data.newBook);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

@@ -2,7 +2,7 @@
   <v-container class="pa-8">
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="books"
       sort-by="author"
       class="elevation-3"
       :search="search"
@@ -68,7 +68,9 @@
                 <v-btn color="blue darken-1" text @click="close">
                   Cancel
                 </v-btn>
-                <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+                <v-btn color="blue darken-1" text @click="editBook">
+                  Save
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -82,9 +84,7 @@
                 <v-btn color="blue darken-1" text @click="closeDelete"
                   >Cancel</v-btn
                 >
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                  >OK</v-btn
-                >
+                <v-btn color="blue darken-1" text @click="deleteBook">OK</v-btn>
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
@@ -115,7 +115,7 @@
 
       <v-data-table
         :headers="headers"
-        :items="desserts"
+        :items="books"
         :search="search"
         :items-per-page="10"
         class="elevation-1"
@@ -125,6 +125,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data: () => ({
     search: "",
@@ -144,7 +145,8 @@ export default {
       { text: "Category", value: "category" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    desserts: [],
+    books: [],
+
     editedIndex: -1,
     editedItem: {
       title: "",
@@ -181,97 +183,65 @@ export default {
     this.initialize();
   },
 
+  mounted() {
+    this.getBooks();
+  },
+
   methods: {
-    initialize() {
-      this.desserts = [
-        {
-          title: "Gospodar prstenova",
-          author: 159,
-          isbn: 6.0,
-          quantity: 24,
-          category: 4.0,
-        },
-        {
-          title: "Šegrt Hlapić",
-          author: "Ivana Brlić-Mažuranić",
-          isbn: 9541564181,
-          quantity: 37,
-          category: "Item 1",
-        },
-        {
-          title: "Vlak u snijegu",
-          author: 262,
-          isbn: 16.0,
-          quantity: 23,
-          category: 6.0,
-        },
-        {
-          title: "Cupcake",
-          author: 305,
-          isbn: 3.7,
-          quantity: 67,
-          category: 4.3,
-        },
-        {
-          title: "Gingerbread",
-          author: 356,
-          isbn: 16.0,
-          quantity: 49,
-          category: 3.9,
-        },
-        {
-          title: "Jelly bean",
-          author: 375,
-          isbn: 0.0,
-          quantity: 94,
-          category: 0.0,
-        },
-        {
-          title: "Lollipop",
-          author: 392,
-          isbn: 0.2,
-          quantity: 98,
-          category: 0,
-        },
-        {
-          title: "Honeycomb",
-          author: 408,
-          isbn: 3.2,
-          quantity: 87,
-          category: 6.5,
-        },
-        {
-          title: "Donut",
-          author: 452,
-          isbn: 25.0,
-          quantity: 51,
-          category: 4.9,
-        },
-        {
-          title: "KitKat",
-          author: 518,
-          isbn: 26.0,
-          quantity: 65,
-          category: 7,
-        },
-      ];
+    async getBooks() {
+      try {
+        let res = await axios.get("http://localhost:3000/book");
+        this.books = res.data;
+        //console.log(this.books);
+      } catch (error) {
+        console.log(error);
+      }
     },
 
+    async deleteBook() {
+      try {
+        console.log(this.editedItem._id);
+
+        let res = await axios.delete(
+          `http://localhost:3000/book/delete/${this.editedItem._id}`
+        );
+        console.log(res.data);
+        this.books.splice(this.editedIndex, 1);
+        this.closeDelete();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async editBook() {
+      try {
+        if (this.editedIndex > -1) {
+          await axios.patch(
+            `http://localhost:3000/book/update/${this.editedItem._id}`,
+            { doc: this.editedItem }
+          );
+          Object.assign(this.books[this.editedIndex], this.editedItem);
+        } else {
+          this.books.push(this.editedItem);
+        }
+        this.close();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    initialize() {},
+
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.books.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.books.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
-    },
-
-    deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
-      this.closeDelete();
     },
 
     close() {
@@ -288,15 +258,6 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
-    },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      } else {
-        this.desserts.push(this.editedItem);
-      }
-      this.close();
     },
   },
 };
