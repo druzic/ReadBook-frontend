@@ -44,6 +44,7 @@
                       <v-text-field
                         v-model="editedItem.isbn"
                         label="ISBN"
+                        maxlength="13"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
@@ -91,6 +92,7 @@
           </v-dialog>
         </v-card>
       </template>
+      {{ /* eslint-disable-next-line */}}
       <template v-slot:item.actions="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
@@ -99,29 +101,7 @@
         <v-btn color="primary" @click="initialize"> Reset </v-btn>
       </template>
     </v-data-table>
-    <!-- <v-card>
-      <v-card-title style="background-color: #2a5d7a; color: white"
-        >Members <v-spacer></v-spacer>
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-          class="text-white"
-          dark
-        ></v-text-field
-      ></v-card-title>
-
-      <v-data-table
-        :headers="headers"
-        :items="books"
-        :search="search"
-        :items-per-page="10"
-        class="elevation-1"
-      ></v-data-table></v-card
-  > --></v-container
-  >
+  </v-container>
 </template>
 
 <script>

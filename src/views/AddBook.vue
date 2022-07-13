@@ -23,7 +23,7 @@
           <v-text-field
             type="number"
             v-model="isbn"
-            :rules="fieldRules"
+            :rules="fieldRulesNumber"
             label="ISBN"
             required
           ></v-text-field>
@@ -80,6 +80,10 @@ export default {
     category: null,
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
     fieldRules: [(v) => !!v || "Field is required"],
+    fieldRulesNumber: [
+      (v) => !!v || "Field is required",
+      (v) => (v && v.length == 13) || "ISBN must be 13 numbers",
+    ],
     books: [],
     newBook: [],
   }),

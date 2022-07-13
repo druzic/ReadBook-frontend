@@ -32,12 +32,10 @@
             :disabled="!valid"
             color="success"
             class="mr-4"
-            @click="validate"
+            @click="addUser"
           >
-            Validate
+            Add user
           </v-btn>
-
-          <v-btn color="error" class="mr-4" @click="reset"> Reset Form </v-btn>
         </v-form>
       </v-card-text>
     </v-card>
@@ -45,6 +43,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data: () => ({
     valid: true,
@@ -69,14 +68,18 @@ export default {
   }),
 
   methods: {
-    validate() {
-      this.$refs.form.validate();
-    },
-    reset() {
-      this.$refs.form.reset();
-    },
-    resetValidation() {
-      this.$refs.form.resetValidation();
+    async addUser() {
+      try {
+        this.$refs.form.validate();
+        await axios.post("http://localhost:3000/user/add", {
+          name: this.name,
+          email: this.email,
+          password: this.password,
+        });
+        this.$refs.form.reset();
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
