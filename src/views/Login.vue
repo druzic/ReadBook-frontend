@@ -9,14 +9,16 @@
           <v-text-field
             label="E-mail"
             type="email"
-            v-model="mail"
+            v-model="email"
           ></v-text-field
           ><v-text-field
             label="Password"
             type="password"
-            v-model="pass"
+            v-model="password"
           ></v-text-field
-          ><v-btn color="primary" class="mr-4" to="/"> Login </v-btn></v-form
+          ><v-btn color="primary" class="mr-4" @click="login">
+            Login
+          </v-btn></v-form
         >
       </v-card>
     </v-layout></v-container
@@ -24,12 +26,32 @@
 </template>
 
 <script>
+import axios from "axios";
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      pass: "",
-      mail: "",
+      password: "",
+      email: "",
     };
+  },
+  methods: {
+    ...mapActions({ getUserData: "getUserData" }),
+    async login() {
+      try {
+        const res = await axios.post("http://localhost:3000/user/login", {
+          password: this.password,
+          email: this.email,
+        });
+        const data = await res.data;
+        localStorage.setItem("token", data.token);
+        this.getUserData();
+        this.$router.push("/");
+        console.log(data.token);
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
 };
 </script>

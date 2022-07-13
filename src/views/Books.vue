@@ -92,10 +92,13 @@
           </v-dialog>
         </v-card>
       </template>
-      {{ /* eslint-disable-next-line */}}
-      <template v-slot:item.actions="{ item }">
+      {{ /* eslint-disable */}}
+      <template v-slot:item.actions="{ item }" v-if="user && user.isAdmin">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+      </template>
+      <template v-slot:item.actions="{ item }" v-else>
+        <v-btn color="primary" @click="rentBook(item)"> Rent </v-btn>
       </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="initialize"> Reset </v-btn>
@@ -106,6 +109,7 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from "vuex";
 export default {
   data: () => ({
     search: "",
@@ -145,6 +149,7 @@ export default {
   }),
 
   computed: {
+    ...mapGetters({ user: "user" }),
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
@@ -168,6 +173,10 @@ export default {
   },
 
   methods: {
+    rentBook(item) {
+      console.log(item);
+    },
+
     async getBooks() {
       try {
         let res = await axios.get("http://localhost:3000/book");

@@ -39,6 +39,7 @@
           :key="item.title"
           :to="item.link"
           link
+          @click="menuActionClick(item.action)"
         >
           <v-list-item-icon>
             <v-icon color="white">{{ item.icon }}</v-icon>
@@ -60,6 +61,7 @@
 </template>
 
 <script>
+import { mapActions, mapMutations } from "vuex";
 export default {
   name: "App",
 
@@ -73,7 +75,12 @@ export default {
         { title: "All books", icon: "mdi-book", link: "/books" },
         { title: "All issued", icon: "mdi-book-clock", link: "/issued" },
         { title: "Report", icon: "mdi-poll", link: "/report" },
-        { title: "Logout", icon: "mdi-logout", link: "/login" },
+        {
+          title: "Logout",
+          icon: "mdi-logout",
+
+          action: "logout",
+        },
       ],
       right: null,
       drawer: true,
@@ -82,8 +89,17 @@ export default {
     };
   },
   methods: {
+    ...mapActions({ getUserData: "getUserData" }),
+    ...mapMutations({ logout: "logout" }),
     onResize() {
       this.windowWidth = window.innerWidth;
+    },
+    menuActionClick(action) {
+      if (action === "logout") {
+        this.logout();
+        localStorage.clear("token");
+        this.$router.push("/login");
+      }
     },
   },
   watch: {
@@ -97,6 +113,7 @@ export default {
     },
   },
   mounted() {
+    this.getUserData();
     this.$nextTick(() => {
       window.addEventListener("resize", this.onResize);
     });
