@@ -56,7 +56,7 @@
                     <v-col cols="12" sm="6" md="4">
                       <v-select
                         v-model="editedItem.category"
-                        :items="items"
+                        :items="categories"
                         label="Category"
                       ></v-select>
                     </v-col>
@@ -97,8 +97,15 @@
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
+
       <template v-slot:item.actions="{ item }" v-else>
-        <v-btn color="primary" @click="reserveItem(item)"> Reservation </v-btn>
+        <v-btn
+          color="primary"
+          :disabled="item.quantity < 1"
+          @click="reserveItem(item)"
+        >
+          Reservation
+        </v-btn>
       </template>
     </v-data-table>
     <v-dialog v-model="dialogReserve" max-width="520px">
@@ -126,12 +133,20 @@ export default {
     dialog: false,
     dialogDelete: false,
     dialogReserve: false,
-    items: ["Item 1", "Item 2", "Item 3", "Item 4"],
+    categories: [
+      "Action and Adventure",
+      "Classics",
+      "Comic Book or Graphic Novel",
+      "Detective and Mystery",
+      "Fantasy",
+      "Historical Fiction",
+      "Horror",
+      "Literary Fiction",
+    ],
     headers: [
       {
         text: "Title",
         align: "start",
-        sortable: false,
         value: "title",
       },
       { text: "Author", value: "author" },
@@ -200,6 +215,7 @@ export default {
           reservationDate: Date.now(),
           dueDate: dueDate,
         });
+        this.getBooks();
         this.closeReserve();
       } catch (error) {
         console.log(error);

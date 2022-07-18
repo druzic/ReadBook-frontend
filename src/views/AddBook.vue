@@ -36,20 +36,11 @@
             required
           ></v-text-field>
 
-          <v-textarea
-            label="Description"
-            v-model="description"
-            :rules="fieldRules"
-            rows="1"
-            auto-grow
-          >
-          </v-textarea>
-
           <v-select
             v-model="category"
-            :items="items"
+            :items="categories"
             :rules="fieldRules"
-            label="Item"
+            label="Category"
             required
           ></v-select>
 
@@ -76,9 +67,17 @@ export default {
     author: "",
     isbn: "",
     quantity: "",
-    description: "",
     category: null,
-    items: ["Item 1", "Item 2", "Item 3", "Item 4"],
+    categories: [
+      "Action and Adventure",
+      "Classics",
+      "Comic Book or Graphic Novel",
+      "Detective and Mystery",
+      "Fantasy",
+      "Historical Fiction",
+      "Horror",
+      "Literary Fiction",
+    ],
     fieldRules: [(v) => !!v || "Field is required"],
     fieldRulesNumber: [
       (v) => !!v || "Field is required",
@@ -97,7 +96,6 @@ export default {
           author: this.author,
           isbn: this.isbn,
           quantity: this.quantity,
-          description: this.description,
           category: this.category,
         });
         this.$refs.form.reset();
