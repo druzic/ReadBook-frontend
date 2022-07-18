@@ -45,8 +45,9 @@ export default {
         });
         const data = await res.data;
         localStorage.setItem("token", data.token);
-        this.getUserData();
-        this.$router.push("/");
+        this.getUserData().then(() => {
+          this.$router.push("/books");
+        });
         console.log(data.token);
       } catch (e) {
         console.log(e);

@@ -34,23 +34,40 @@
       <v-divider></v-divider>
 
       <v-list dense nav>
-        <v-list-item
-          v-for="item in items"
-          :key="item.title"
-          :to="item.link"
-          link
-          @click="menuActionClick(item.action)"
-        >
-          <v-list-item-icon>
-            <v-icon color="white">{{ item.icon }}</v-icon>
-          </v-list-item-icon>
+        <div v-for="item in items" :key="item.title">
+          <v-list-item
+            :to="item.link"
+            v-if="user && !user.isAdmin && !item.needAdmin"
+            link
+            @click="menuActionClick(item.action)"
+          >
+            <v-list-item-icon>
+              <v-icon color="white">{{ item.icon }}</v-icon>
+            </v-list-item-icon>
 
-          <v-list-item-content>
-            <v-list-item-title style="color: white">{{
-              item.title
-            }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+            <v-list-item-content>
+              <v-list-item-title style="color: white">{{
+                item.title
+              }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
+            :to="item.link"
+            v-else-if="user && user.isAdmin"
+            link
+            @click="menuActionClick(item.action)"
+          >
+            <v-list-item-icon>
+              <v-icon color="white">{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title style="color: white">{{
+                item.title
+              }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
       </v-list>
     </v-navigation-drawer>
 
@@ -61,25 +78,64 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
+import { mapActions, mapMutations, mapGetters } from "vuex";
 export default {
   name: "App",
 
   data() {
     return {
       items: [
-        { title: "Dashboard", icon: "mdi-view-dashboard", link: "/" },
-        { title: "Add member", icon: "mdi-account-plus", link: "/addMember" },
-        { title: "Members", icon: "mdi-account", link: "/members" },
-        { title: "Add book", icon: "mdi-book-plus", link: "/addBook" },
-        { title: "All books", icon: "mdi-book", link: "/books" },
-        { title: "Issue Book", icon: "mdi-share", link: "/issueBook" },
-        { title: "All issued", icon: "mdi-book-clock", link: "/issued" },
-        { title: "Report", icon: "mdi-poll", link: "/report" },
+        {
+          title: "Dashboard",
+          icon: "mdi-view-dashboard",
+          link: "/",
+          needAdmin: true,
+        },
+        {
+          title: "Add member",
+          icon: "mdi-account-plus",
+          link: "/addMember",
+          needAdmin: true,
+        },
+        {
+          title: "Members",
+          icon: "mdi-account",
+          link: "/members",
+          needAdmin: true,
+        },
+        {
+          title: "Add book",
+          icon: "mdi-book-plus",
+          link: "/addBook",
+          needAdmin: true,
+        },
+        {
+          title: "All books",
+          icon: "mdi-book",
+          link: "/books",
+        },
+        {
+          title: "Reservations",
+          icon: "mdi-run",
+          link: "/reservation",
+          needAdmin: true,
+        },
+        {
+          title: "Issue Book",
+          icon: "mdi-share",
+          link: "/issueBook",
+          needAdmin: true,
+        },
+        {
+          title: "All issued",
+          icon: "mdi-book-clock",
+          link: "/issued",
+          needAdmin: true,
+        },
+        { title: "Report", icon: "mdi-poll", link: "/report", needAdmin: true },
         {
           title: "Logout",
           icon: "mdi-logout",
-
           action: "logout",
         },
       ],
@@ -99,9 +155,13 @@ export default {
       if (action === "logout") {
         this.logout();
         localStorage.clear("token");
+        //console.log(localStorage.token,);
         this.$router.push("/login");
       }
     },
+  },
+  computed: {
+    ...mapGetters({ user: "user" }),
   },
   watch: {
     windowWidth() {

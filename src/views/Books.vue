@@ -98,12 +98,22 @@
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
       <template v-slot:item.actions="{ item }" v-else>
-        <v-btn color="primary" @click="rentBook(item)"> Reservation </v-btn>
-      </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize"> Reset </v-btn>
+        <v-btn color="primary" @click="reserveItem(item)"> Reservation </v-btn>
       </template>
     </v-data-table>
+    <v-dialog v-model="dialogReserve" max-width="520px">
+      <v-card>
+        <v-card-title class="text-h5 justify-center"
+          >Are you sure you want to reserve this book?</v-card-title
+        >
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="closeReserve">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="reservation">OK</v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -115,6 +125,7 @@ export default {
     search: "",
     dialog: false,
     dialogDelete: false,
+    dialogReserve: false,
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
     headers: [
       {
@@ -162,6 +173,9 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete();
     },
+    dialogReserve(val) {
+      val || this.closeReserve();
+    },
   },
 
   created() {
@@ -173,8 +187,23 @@ export default {
   },
 
   methods: {
-    rentBook(item) {
-      console.log(item);
+    async reservation() {
+      try {
+        console.log(this.user._id, this.editedItem._id, dueDate, Date.now());
+        console.log(this.editedItem);
+        let dueDate = new Date();
+        dueDate.setDate(dueDate.getDate() + 1);
+
+        await axios.post("http://localhost:3000/reservation/add", {
+          user: this.user._id,
+          book: this.editedItem._id,
+          reservationDate: Date.now(),
+          dueDate: dueDate,
+        });
+        this.closeReserve();
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     async getBooks() {
@@ -233,12 +262,22 @@ export default {
       this.dialogDelete = true;
     },
 
+    reserveItem(item) {
+      this.editedIndex = this.books.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogReserve = true;
+    },
+
     close() {
       this.dialog = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+    },
+
+    closeReserve() {
+      this.dialogReserve = false;
     },
 
     closeDelete() {

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -55,6 +56,7 @@ export default new Vuex.Store({
         commit("setIsAuth", true);
         commit("setUser", res.data);
         commit("setIsLoading", false);
+
         //console.log(res.data);
       } catch (error) {
         commit("setIsAuth", false);

@@ -2,7 +2,7 @@
   <v-container class="pa-8">
     <v-data-table
       :headers="headers"
-      :items="issued"
+      :items="reservations"
       sort-by="author"
       class="elevation-3"
       :search="search"
@@ -10,7 +10,7 @@
       <template v-slot:top>
         <v-card flat>
           <v-card-title style="background-color: #2a5d7a; color: white"
-            >Issued <v-spacer></v-spacer>
+            >Reservations <v-spacer></v-spacer>
             <v-text-field
               v-model="search"
               append-icon="mdi-magnify"
@@ -26,18 +26,18 @@
       </template>
       {{ /* eslint-disable */}}
       <template v-slot:item.actions="{ item }">
-        <v-btn color="primary" @click="returnDialog(item)"> Returned </v-btn>
+        <v-btn color="primary" @click="issueDialog(item)"> Issue </v-btn>
       </template>
     </v-data-table>
-    <v-dialog v-model="dialogDelete" max-width="400px">
+    <v-dialog v-model="dialogIssue" max-width="400px">
       <v-card>
         <v-card-title class="text-h5 justify-center"
-          >Mark this book as returned?</v-card-title
+          >Mark this reservation as issued?</v-card-title
         >
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-          <v-btn color="blue darken-1" text @click="returnBook">Yes</v-btn>
+          <v-btn color="blue darken-1" text @click="closeIssue">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="rentBook">Yes</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -53,8 +53,8 @@ export default {
   data: () => ({
     search: "",
 
-    dialogDelete: false,
-    items: ["Item 1", "Item 2", "Item 3", "Item 4"],
+    dialogIssue: false,
+
     headers: [
       {
         text: "Book author",
@@ -69,11 +69,11 @@ export default {
         value: "book.title",
       },
       { text: "User", value: "user.email" },
-      { text: "Date issued", value: "issuedDate" },
+      { text: "Date issued", value: "reservationDate" },
       { text: "Due date", value: "dueDate" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    issued: [],
+    reservations: [],
 
     editedIndex: -1,
     editedItem: {
@@ -86,7 +86,7 @@ export default {
     defaultItem: {
       user: "",
       book: "",
-      issuedDate: "",
+      reservationDate: "",
       dueDate: "",
     },
   }),
@@ -99,32 +99,45 @@ export default {
   },
 
   watch: {
-    dialogDelete(val) {
-      val || this.closeDelete();
+    dialogIssue(val) {
+      val || this.closeIssue();
     },
-  },
-
-  created() {
-    this.initialize();
   },
 
   mounted() {
-    this.getIssueds();
+    this.getReservations();
   },
 
   methods: {
-    rentBook(item) {
-      console.log(item);
+    async rentBook() {
+      try {
+        let dueDate = new Date();
+        dueDate.setDate(dueDate.getDate() + 14);
+        console.log(this.editedItem);
+        await axios.post("http://localhost:3000/issued/reservation", {
+          user: this.editedItem.user._id,
+          book: this.editedItem.book._id,
+          issuedDate: Date.now(),
+          dueDate: dueDate,
+          reservationID: this.editedItem._id,
+        });
+        this.reservations.splice(this.editedIndex, 1);
+        this.closeIssue();
+      } catch (error) {
+        console.log(error);
+      }
     },
 
-    async getIssueds() {
+    async getReservations() {
       try {
-        let res = await axios.get("http://localhost:3000/issued");
-        this.issued = res.data;
+        let res = await axios.get("http://localhost:3000/reservation");
+        this.reservations = res.data;
 
-        this.issued.forEach((issue) => {
-          issue.issuedDate = this.moment(issue.issuedDate).format(`LLL`);
-          issue.dueDate = this.moment(issue.dueDate).format(`LLL`);
+        this.reservations.forEach((reservation) => {
+          reservation.reservationDate = this.moment(
+            reservation.reservationDate
+          ).format(`LLL`);
+          reservation.dueDate = this.moment(reservation.dueDate).format(`LLL`);
         });
         //console.log(this.issued);
       } catch (error) {
@@ -132,34 +145,14 @@ export default {
       }
     },
 
-    async returnBook(item) {
-      try {
-        //console.log(this.editedItem._id);
-        const deleteIndex = this.issued.indexOf(item);
-        console.log(this.editedItem);
-        let res = await axios.patch(`http://localhost:3000/issued`, {
-          id: this.editedItem._id,
-          book: this.editedItem.book,
-        });
-        this.issued.splice(deleteIndex, 1);
-        console.log(res.data);
-
-        this.closeDelete();
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-    initialize() {},
-
-    returnDialog(item) {
-      this.editedIndex = this.issued.indexOf(item);
+    issueDialog(item) {
+      this.editedIndex = this.reservations.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      this.dialogDelete = true;
+      this.dialogIssue = true;
     },
 
-    closeDelete() {
-      this.dialogDelete = false;
+    closeIssue() {
+      this.dialogIssue = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
