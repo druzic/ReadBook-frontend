@@ -73,6 +73,7 @@ export default {
         { title: "Members", icon: "mdi-account", link: "/members" },
         { title: "Add book", icon: "mdi-book-plus", link: "/addBook" },
         { title: "All books", icon: "mdi-book", link: "/books" },
+        { title: "Issue Book", icon: "mdi-share", link: "/issueBook" },
         { title: "All issued", icon: "mdi-book-clock", link: "/issued" },
         { title: "Report", icon: "mdi-poll", link: "/report" },
         {

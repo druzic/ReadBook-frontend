@@ -55,7 +55,7 @@ export default new Vuex.Store({
         commit("setIsAuth", true);
         commit("setUser", res.data);
         commit("setIsLoading", false);
-        console.log(res.data);
+        //console.log(res.data);
       } catch (error) {
         commit("setIsAuth", false);
         commit("setUser", null);
