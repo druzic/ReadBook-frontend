@@ -48,7 +48,7 @@ export default {
         this.getUserData().then(() => {
           this.$router.push("/books");
         });
-        console.log(data.token);
+        //console.log(data.token);
       } catch (e) {
         console.log(e);
       }

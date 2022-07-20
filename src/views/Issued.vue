@@ -4,6 +4,7 @@
       :headers="headers"
       :items="issued"
       sort-by="author"
+      :item-class="itemRowBackground"
       class="elevation-3"
       :search="search"
     >
@@ -65,7 +66,7 @@ export default {
       {
         text: "Book title",
         align: "start",
-        sortable: false,
+        sortable: true,
         value: "book.title",
       },
       { text: "User", value: "user.email" },
@@ -113,6 +114,13 @@ export default {
   },
 
   methods: {
+    itemRowBackground: function (item) {
+      const due = Date.parse(item.dueDate);
+      const today = Date.parse(this.moment());
+      const isLate = this.moment(today).isBefore(due);
+      return isLate !== true ? "style-1" : "style-2";
+    },
+
     rentBook(item) {
       console.log(item);
     },
@@ -169,4 +177,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.style-1 {
+  background-color: #f44336;
+  font-weight: bold;
+}
+.style-2 {
+}
+</style>

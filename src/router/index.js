@@ -51,6 +51,14 @@ const routes = [
     },
   },
   {
+    path: "/myBooks",
+    name: "MyBooks",
+    component: () => import("../views/MyBooks.vue"),
+    meta: {
+      needUser: true,
+    },
+  },
+  {
     path: "/issueBook",
     name: "IssueBook",
     component: () => import("../views/IssueBook.vue"),

@@ -53,7 +53,7 @@
           </v-list-item>
           <v-list-item
             :to="item.link"
-            v-else-if="user && user.isAdmin"
+            v-else-if="user && user.isAdmin && !item.help"
             link
             @click="menuActionClick(item.action)"
           >
@@ -113,6 +113,12 @@ export default {
           title: "All books",
           icon: "mdi-book",
           link: "/books",
+        },
+        {
+          title: "My books",
+          icon: "mdi-book-clock",
+          link: "/myBooks",
+          help: true,
         },
         {
           title: "Reservations",
