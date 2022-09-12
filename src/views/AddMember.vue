@@ -71,7 +71,7 @@ export default {
     async addUser() {
       try {
         this.$refs.form.validate();
-        await axios.post("http://localhost:3000/user/add", {
+        await axios.post("https://readbookfipu.herokuapp.com/user/add", {
           name: this.name,
           email: this.email,
           password: this.password,

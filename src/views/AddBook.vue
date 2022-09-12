@@ -91,13 +91,16 @@ export default {
     async addBook() {
       try {
         this.$refs.form.validate();
-        const res = await axios.post("http://localhost:3000/book/add", {
-          title: this.title,
-          author: this.author,
-          isbn: this.isbn,
-          quantity: this.quantity,
-          category: this.category,
-        });
+        const res = await axios.post(
+          "https://readbookfipu.herokuapp.com/book/add",
+          {
+            title: this.title,
+            author: this.author,
+            isbn: this.isbn,
+            quantity: this.quantity,
+            category: this.category,
+          }
+        );
         this.$refs.form.reset();
         console.log(res.data.newBook);
       } catch (error) {

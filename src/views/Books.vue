@@ -209,7 +209,7 @@ export default {
         let dueDate = new Date();
         dueDate.setDate(dueDate.getDate() + 1);
 
-        await axios.post("http://localhost:3000/reservation/add", {
+        await axios.post("https://readbookfipu.herokuapp.com/reservation/add", {
           user: this.user._id,
           book: this.editedItem._id,
           reservationDate: Date.now(),
@@ -224,7 +224,7 @@ export default {
 
     async getBooks() {
       try {
-        let res = await axios.get("http://localhost:3000/book");
+        let res = await axios.get("https://readbookfipu.herokuapp.com/book");
         this.books = res.data;
         //console.log(this.books);
       } catch (error) {
@@ -237,7 +237,7 @@ export default {
         console.log(this.editedItem._id);
 
         let res = await axios.delete(
-          `http://localhost:3000/book/delete/${this.editedItem._id}`
+          `https://readbookfipu.herokuapp.com/book/delete/${this.editedItem._id}`
         );
         console.log(res.data);
         this.books.splice(this.editedIndex, 1);
@@ -251,7 +251,7 @@ export default {
       try {
         if (this.editedIndex > -1) {
           await axios.patch(
-            `http://localhost:3000/book/update/${this.editedItem._id}`,
+            `https://readbookfipu.herokuapp.com/book/update/${this.editedItem._id}`,
             { doc: this.editedItem }
           );
           Object.assign(this.books[this.editedIndex], this.editedItem);

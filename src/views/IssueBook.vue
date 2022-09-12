@@ -67,7 +67,7 @@ export default {
         let dueDate = new Date();
         dueDate.setDate(dueDate.getDate() + 14);
 
-        await axios.post("http://localhost:3000/issued/add", {
+        await axios.post("https://readbookfipu.herokuapp.com/issued/add", {
           user: this.user._id,
           book: this.book._id,
           issuedDate: Date.now(),
@@ -81,7 +81,9 @@ export default {
 
     async getBooks() {
       try {
-        let res = await axios.get("http://localhost:3000/book/available");
+        let res = await axios.get(
+          "https://readbookfipu.herokuapp.com/book/available"
+        );
         this.books = res.data;
         this.books.forEach(
           (book) => (book.fullname = `${book.author}, ${book.title}`)
@@ -93,7 +95,7 @@ export default {
     },
     async getUsers() {
       try {
-        let res = await axios.get("http://localhost:3000/user");
+        let res = await axios.get("https://readbookfipu.herokuapp.com/user");
         this.users = res.data;
         this.users.forEach(
           (user) => (user.fullname = `${user.name}, ${user.email}`)

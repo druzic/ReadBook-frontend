@@ -131,7 +131,7 @@ export default {
   methods: {
     async getUsers() {
       try {
-        let res = await axios.get("http://localhost:3000/user");
+        let res = await axios.get("https://readbookfipu.herokuapp.com/user");
         this.users = res.data;
         //console.log(this.users);
       } catch (error) {
@@ -144,7 +144,7 @@ export default {
         console.log(this.editedItem._id);
 
         let res = await axios.delete(
-          `http://localhost:3000/user/delete/${this.editedItem._id}`
+          `https://readbookfipu.herokuapp.com/user/delete/${this.editedItem._id}`
         );
         console.log(res.data);
         this.users.splice(this.editedIndex, 1);
@@ -158,7 +158,7 @@ export default {
       try {
         if (this.editedIndex > -1) {
           await axios.patch(
-            `http://localhost:3000/user/update/${this.editedItem._id}`,
+            `https://readbookfipu.herokuapp.com/user/update/${this.editedItem._id}`,
             { doc: this.editedItem }
           );
           Object.assign(this.users[this.editedIndex], this.editedItem);

@@ -38,11 +38,15 @@ export default {
   methods: {
     ...mapActions({ getUserData: "getUserData" }),
     async login() {
+      console.log("aaaaaaaaa");
       try {
-        const res = await axios.post("http://localhost:3000/user/login", {
-          password: this.password,
-          email: this.email,
-        });
+        const res = await axios.post(
+          "https://readbookfipu.herokuapp.com/user/login",
+          {
+            password: this.password,
+            email: this.email,
+          }
+        );
         const data = await res.data;
         localStorage.setItem("token", data.token);
         this.getUserData().then(() => {

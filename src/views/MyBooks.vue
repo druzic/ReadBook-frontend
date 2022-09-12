@@ -74,7 +74,7 @@ export default {
       try {
         //console.log(this.user._id);
         let res = await axios.get(
-          `http://localhost:3000/issued/${this.user._id}`
+          `https://readbookfipu.herokuapp.com/issued/${this.user._id}`
         );
         this.myBooks = res.data;
         this.myBooks.forEach((issue) => {

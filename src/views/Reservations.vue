@@ -122,13 +122,16 @@ export default {
         let dueDate = new Date();
         dueDate.setDate(dueDate.getDate() + 14);
         console.log(this.editedItem);
-        await axios.post("http://localhost:3000/issued/reservation", {
-          user: this.editedItem.user._id,
-          book: this.editedItem.book._id,
-          issuedDate: Date.now(),
-          dueDate: dueDate,
-          reservationID: this.editedItem._id,
-        });
+        await axios.post(
+          "https://readbookfipu.herokuapp.com/issued/reservation",
+          {
+            user: this.editedItem.user._id,
+            book: this.editedItem.book._id,
+            issuedDate: Date.now(),
+            dueDate: dueDate,
+            reservationID: this.editedItem._id,
+          }
+        );
         this.reservations.splice(this.editedIndex, 1);
         this.closeIssue();
       } catch (error) {
@@ -138,7 +141,9 @@ export default {
 
     async getReservations() {
       try {
-        let res = await axios.get("http://localhost:3000/reservation");
+        let res = await axios.get(
+          "https://readbookfipu.herokuapp.com/reservation"
+        );
         this.reservations = res.data;
 
         this.reservations.forEach((reservation) => {

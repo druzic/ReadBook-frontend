@@ -127,7 +127,7 @@ export default {
 
     async getIssueds() {
       try {
-        let res = await axios.get("http://localhost:3000/issued");
+        let res = await axios.get("https://readbookfipu.herokuapp.com/issued");
         this.issued = res.data;
 
         this.issued.forEach((issue) => {
@@ -145,10 +145,13 @@ export default {
         //console.log(this.editedItem._id);
         const deleteIndex = this.issued.indexOf(item);
         console.log(this.editedItem);
-        let res = await axios.patch(`http://localhost:3000/issued`, {
-          id: this.editedItem._id,
-          book: this.editedItem.book,
-        });
+        let res = await axios.patch(
+          `https://readbookfipu.herokuapp.com/issued`,
+          {
+            id: this.editedItem._id,
+            book: this.editedItem.book,
+          }
+        );
         this.issued.splice(deleteIndex, 1);
         console.log(res.data);
 
