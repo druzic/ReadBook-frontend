@@ -49,9 +49,9 @@ export default {
           this.$router.push("/books");
         });
         //console.log(data.token);
-      } catch (e) {
-        console.log(e.response.data);
-        this.$toast.error(e.response.data.error, {
+      } catch (error) {
+        console.log(error.response.data);
+        this.$toast.error(error.response.data.error, {
           position: "bottom-right",
           timeout: 5000,
           closeOnClick: true,
@@ -65,7 +65,7 @@ export default {
           icon: true,
           rtl: false,
         });
-        console.log(e);
+        console.log(error);
       }
     },
   },
