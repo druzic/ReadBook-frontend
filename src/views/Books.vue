@@ -209,12 +209,13 @@ export default {
         let dueDate = new Date();
         dueDate.setDate(dueDate.getDate() + 1);
 
-        await axios.post("https://readbookfipu.herokuapp.com/reservation/add", {
+        await axios.post("/reservation/add", {
           user: this.user._id,
           book: this.editedItem._id,
           reservationDate: Date.now(),
           dueDate: dueDate,
         });
+        this.bookReserved();
         this.getBooks();
         this.closeReserve();
       } catch (error) {
@@ -224,7 +225,7 @@ export default {
 
     async getBooks() {
       try {
-        let res = await axios.get("https://readbookfipu.herokuapp.com/book");
+        let res = await axios.get("/book");
         this.books = res.data;
         //console.log(this.books);
       } catch (error) {
@@ -236,12 +237,11 @@ export default {
       try {
         console.log(this.editedItem._id);
 
-        let res = await axios.delete(
-          `https://readbookfipu.herokuapp.com/book/delete/${this.editedItem._id}`
-        );
+        let res = await axios.delete(`/book/delete/${this.editedItem._id}`);
         console.log(res.data);
         this.books.splice(this.editedIndex, 1);
         this.closeDelete();
+        this.bookDeleted();
       } catch (error) {
         console.log(error);
       }
@@ -250,15 +250,15 @@ export default {
     async editBook() {
       try {
         if (this.editedIndex > -1) {
-          await axios.patch(
-            `https://readbookfipu.herokuapp.com/book/update/${this.editedItem._id}`,
-            { doc: this.editedItem }
-          );
+          await axios.patch(`/book/update/${this.editedItem._id}`, {
+            doc: this.editedItem,
+          });
           Object.assign(this.books[this.editedIndex], this.editedItem);
         } else {
           this.books.push(this.editedItem);
         }
         this.close();
+        this.bookEdited();
       } catch (error) {
         console.log(error);
       }
@@ -302,6 +302,57 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+    },
+    bookEdited() {
+      this.$toast.success("Book edited successfully.", {
+        position: "bottom-right",
+        timeout: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true,
+        rtl: false,
+      });
+    },
+    bookDeleted() {
+      this.$toast.success("Book successfully deleted.", {
+        position: "bottom-right",
+        timeout: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true,
+        rtl: false,
+      });
+    },
+    bookReserved() {
+      this.$toast.success(
+        "Book successfully rented. You have 24 hours to pick it up.",
+        {
+          position: "bottom-right",
+          timeout: 5000,
+          closeOnClick: true,
+          pauseOnFocusLoss: true,
+          pauseOnHover: true,
+          draggable: true,
+          draggablePercent: 0.6,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: true,
+          rtl: false,
+        }
+      );
     },
   },
 };

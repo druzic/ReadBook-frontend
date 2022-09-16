@@ -131,7 +131,7 @@ export default {
   methods: {
     async getUsers() {
       try {
-        let res = await axios.get("https://readbookfipu.herokuapp.com/user");
+        let res = await axios.get("/user");
         this.users = res.data;
         //console.log(this.users);
       } catch (error) {
@@ -143,12 +143,11 @@ export default {
       try {
         console.log(this.editedItem._id);
 
-        let res = await axios.delete(
-          `https://readbookfipu.herokuapp.com/user/delete/${this.editedItem._id}`
-        );
+        let res = await axios.delete(`/user/delete/${this.editedItem._id}`);
         console.log(res.data);
         this.users.splice(this.editedIndex, 1);
         this.closeDelete();
+        this.memberDeleted();
       } catch (error) {
         console.log(error);
       }
@@ -157,15 +156,15 @@ export default {
     async editUser() {
       try {
         if (this.editedIndex > -1) {
-          await axios.patch(
-            `https://readbookfipu.herokuapp.com/user/update/${this.editedItem._id}`,
-            { doc: this.editedItem }
-          );
+          await axios.patch(`/user/update/${this.editedItem._id}`, {
+            doc: this.editedItem,
+          });
           Object.assign(this.users[this.editedIndex], this.editedItem);
         } else {
           this.users.push(this.editedItem);
         }
         this.close();
+        this.memberEdited();
       } catch (error) {
         console.log(error);
       }
@@ -196,6 +195,39 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
+      });
+    },
+
+    memberEdited() {
+      this.$toast.success("Member edited successfully.", {
+        position: "bottom-right",
+        timeout: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true,
+        rtl: false,
+      });
+    },
+    memberDeleted() {
+      this.$toast.success("Member successfully deleted.", {
+        position: "bottom-right",
+        timeout: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true,
+        rtl: false,
       });
     },
   },

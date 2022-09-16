@@ -73,9 +73,7 @@ export default {
     async getMyBooks() {
       try {
         //console.log(this.user._id);
-        let res = await axios.get(
-          `https://readbookfipu.herokuapp.com/issued/${this.user._id}`
-        );
+        let res = await axios.get(`/issued/${this.user._id}`);
         this.myBooks = res.data;
         this.myBooks.forEach((issue) => {
           issue.issuedDate = this.moment(issue.issuedDate).format(`LLL`);

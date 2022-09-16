@@ -38,15 +38,11 @@ export default {
   methods: {
     ...mapActions({ getUserData: "getUserData" }),
     async login() {
-      console.log("aaaaaaaaa");
       try {
-        const res = await axios.post(
-          "https://readbookfipu.herokuapp.com/user/login",
-          {
-            password: this.password,
-            email: this.email,
-          }
-        );
+        const res = await axios.post("/user/login", {
+          password: this.password,
+          email: this.email,
+        });
         const data = await res.data;
         localStorage.setItem("token", data.token);
         this.getUserData().then(() => {
@@ -54,6 +50,21 @@ export default {
         });
         //console.log(data.token);
       } catch (e) {
+        console.log(e.response.data);
+        this.$toast.error(e.response.data.error, {
+          position: "bottom-right",
+          timeout: 5000,
+          closeOnClick: true,
+          pauseOnFocusLoss: true,
+          pauseOnHover: true,
+          draggable: true,
+          draggablePercent: 0.6,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: true,
+          rtl: false,
+        });
         console.log(e);
       }
     },

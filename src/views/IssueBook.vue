@@ -67,12 +67,13 @@ export default {
         let dueDate = new Date();
         dueDate.setDate(dueDate.getDate() + 14);
 
-        await axios.post("https://readbookfipu.herokuapp.com/issued/add", {
+        await axios.post("/issued/add", {
           user: this.user._id,
           book: this.book._id,
           issuedDate: Date.now(),
           dueDate: dueDate,
         });
+        this.bookIssued();
         this.$refs.form.reset();
       } catch (error) {
         console.log(error);
@@ -81,9 +82,7 @@ export default {
 
     async getBooks() {
       try {
-        let res = await axios.get(
-          "https://readbookfipu.herokuapp.com/book/available"
-        );
+        let res = await axios.get("/book/available");
         this.books = res.data;
         this.books.forEach(
           (book) => (book.fullname = `${book.author}, ${book.title}`)
@@ -95,7 +94,7 @@ export default {
     },
     async getUsers() {
       try {
-        let res = await axios.get("https://readbookfipu.herokuapp.com/user");
+        let res = await axios.get("/user");
         this.users = res.data;
         this.users.forEach(
           (user) => (user.fullname = `${user.name}, ${user.email}`)
@@ -104,6 +103,22 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    bookIssued() {
+      this.$toast.success("Book successfully issued.", {
+        position: "bottom-right",
+        timeout: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true,
+        rtl: false,
+      });
     },
   },
   beforeDestroy() {},

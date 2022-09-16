@@ -91,21 +91,35 @@ export default {
     async addBook() {
       try {
         this.$refs.form.validate();
-        const res = await axios.post(
-          "https://readbookfipu.herokuapp.com/book/add",
-          {
-            title: this.title,
-            author: this.author,
-            isbn: this.isbn,
-            quantity: this.quantity,
-            category: this.category,
-          }
-        );
+        const res = await axios.post("/book/add", {
+          title: this.title,
+          author: this.author,
+          isbn: this.isbn,
+          quantity: this.quantity,
+          category: this.category,
+        });
+        this.bookAdded();
         this.$refs.form.reset();
         console.log(res.data.newBook);
       } catch (error) {
         console.log(error);
       }
+    },
+    bookAdded() {
+      this.$toast.success("New book successfully added.", {
+        position: "bottom-right",
+        timeout: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true,
+        rtl: false,
+      });
     },
   },
 };

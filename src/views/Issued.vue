@@ -127,7 +127,7 @@ export default {
 
     async getIssueds() {
       try {
-        let res = await axios.get("https://readbookfipu.herokuapp.com/issued");
+        let res = await axios.get("/issued");
         this.issued = res.data;
 
         this.issued.forEach((issue) => {
@@ -145,16 +145,13 @@ export default {
         //console.log(this.editedItem._id);
         const deleteIndex = this.issued.indexOf(item);
         console.log(this.editedItem);
-        let res = await axios.patch(
-          `https://readbookfipu.herokuapp.com/issued`,
-          {
-            id: this.editedItem._id,
-            book: this.editedItem.book,
-          }
-        );
+        let res = await axios.patch(`/issued`, {
+          id: this.editedItem._id,
+          book: this.editedItem.book,
+        });
         this.issued.splice(deleteIndex, 1);
         console.log(res.data);
-
+        this.bookReturned();
         this.closeDelete();
       } catch (error) {
         console.log(error);
@@ -174,6 +171,22 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
+      });
+    },
+    bookReturned() {
+      this.$toast.success("Book marked as returned.", {
+        position: "bottom-right",
+        timeout: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true,
+        rtl: false,
       });
     },
   },

@@ -71,15 +71,33 @@ export default {
     async addUser() {
       try {
         this.$refs.form.validate();
-        await axios.post("https://readbookfipu.herokuapp.com/user/add", {
+        await axios.post("/user/add", {
           name: this.name,
           email: this.email,
           password: this.password,
         });
+        this.memberAdded();
         this.$refs.form.reset();
       } catch (error) {
         console.log(error);
       }
+    },
+
+    memberAdded() {
+      this.$toast.success("New user successfully added.", {
+        position: "bottom-right",
+        timeout: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true,
+        rtl: false,
+      });
     },
   },
 };

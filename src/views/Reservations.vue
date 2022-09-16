@@ -122,16 +122,14 @@ export default {
         let dueDate = new Date();
         dueDate.setDate(dueDate.getDate() + 14);
         console.log(this.editedItem);
-        await axios.post(
-          "https://readbookfipu.herokuapp.com/issued/reservation",
-          {
-            user: this.editedItem.user._id,
-            book: this.editedItem.book._id,
-            issuedDate: Date.now(),
-            dueDate: dueDate,
-            reservationID: this.editedItem._id,
-          }
-        );
+        await axios.post("/issued/reservation", {
+          user: this.editedItem.user._id,
+          book: this.editedItem.book._id,
+          issuedDate: Date.now(),
+          dueDate: dueDate,
+          reservationID: this.editedItem._id,
+        });
+        this.bookIssued();
         this.reservations.splice(this.editedIndex, 1);
         this.closeIssue();
       } catch (error) {
@@ -141,9 +139,7 @@ export default {
 
     async getReservations() {
       try {
-        let res = await axios.get(
-          "https://readbookfipu.herokuapp.com/reservation"
-        );
+        let res = await axios.get("/reservation");
         this.reservations = res.data;
 
         this.reservations.forEach((reservation) => {
@@ -169,6 +165,22 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
+      });
+    },
+    bookIssued() {
+      this.$toast.success("Book successfully issued.", {
+        position: "bottom-right",
+        timeout: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true,
+        rtl: false,
       });
     },
   },

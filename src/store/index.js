@@ -52,9 +52,7 @@ export default new Vuex.Store({
         commit("setAuthToken", localStorage.getItem("token"));
       }
       try {
-        const res = await axios.get(
-          "https://readbookfipu.herokuapp.com/user/login"
-        );
+        const res = await axios.get("/user/login");
         commit("setIsAuth", true);
         commit("setUser", res.data);
         commit("setIsLoading", false);
