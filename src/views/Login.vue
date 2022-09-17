@@ -51,7 +51,7 @@ export default {
         //console.log(data.token);
       } catch (error) {
         console.log(error.response.data);
-        this.$toast.error(error.response.data.error, {
+        this.$toast.error(error.response.data.error || "Unknown error", {
           position: "bottom-right",
           timeout: 5000,
           closeOnClick: true,
