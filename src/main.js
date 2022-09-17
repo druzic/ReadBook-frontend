@@ -8,7 +8,7 @@ import axios from "axios";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
-axios.defaults.baseURL = "https://readbookfipu.netlify.app";
+axios.defaults.baseURL = "https://readbookfipu.herokuapp.com";
 //axios.defaults.baseURL = "http://localhost:3000";
 Vue.config.productionTip = false;
 moment.locale("en");
