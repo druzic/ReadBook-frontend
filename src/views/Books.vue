@@ -216,7 +216,7 @@ export default {
           dueDate: dueDate,
         });
         this.bookReserved();
-        this.getBooks();
+        await this.getBooks();
         this.closeReserve();
       } catch (error) {
         console.log(error);

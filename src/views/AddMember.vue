@@ -27,6 +27,11 @@
             label="Password"
             required
           ></v-text-field>
+          <v-select
+            v-model="userType"
+            :items="items"
+            label="User type"
+          ></v-select>
 
           <v-btn
             :disabled="!valid"
@@ -63,7 +68,8 @@ export default {
       (v) => (v && v.length >= 5) || "Password must be more than 5 characters",
     ],
     select: null,
-    items: ["Item 1", "Item 2", "Item 3", "Item 4"],
+    items: ["Member", "Admin"],
+    userType: "Member",
     checkbox: false,
   }),
 
@@ -75,6 +81,7 @@ export default {
           name: this.name,
           email: this.email,
           password: this.password,
+          userType: this.userType,
         });
         this.memberAdded();
         this.$refs.form.reset();
